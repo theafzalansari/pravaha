@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+.env.local
+
+# Data / Videos
+data/videos/*
+!data/videos/.gitkeep
+
+# System & IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
