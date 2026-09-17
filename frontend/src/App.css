@@ -1741,3 +1741,76 @@ footer {
 
   backdrop-filter: blur(5px);
 }
+
+/* =========================================================
+   LEAFLET CROWD RISK MAP STYLES
+   ========================================================= */
+
+.leaflet-map-container {
+  height: 270px;
+  position: relative;
+  border-radius: 9px;
+  overflow: hidden;
+  border: 1px solid #dedbd3;
+  z-index: 1;
+}
+
+.zone-leaflet-tooltip {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(200, 135, 50, 0.4) !important;
+  border-radius: 8px !important;
+  padding: 4px 9px !important;
+  box-shadow: 0 4px 12px rgba(43, 37, 27, 0.15) !important;
+  font-family: inherit !important;
+  transition: all 0.2s ease !important;
+}
+
+.zone-leaflet-tooltip::before {
+  display: none !important;
+}
+
+.zone-leaflet-tooltip.selected {
+  border-color: #c88732 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(200, 135, 50, 0.3), 0 6px 16px rgba(43, 37, 27, 0.2) !important;
+}
+
+.zone-tooltip-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 1.25;
+}
+
+.zone-tooltip-content strong {
+  font-size: 12px;
+  font-weight: 800;
+  color: #292620;
+}
+
+.zone-tooltip-content span {
+  font-size: 9px;
+  font-weight: 700;
+  color: #74716b;
+}
+
+@keyframes leafletPulse {
+  0% {
+    stroke-opacity: 0.9;
+    stroke-width: 2px;
+  }
+  50% {
+    stroke-opacity: 0.3;
+    stroke-width: 6px;
+  }
+  100% {
+    stroke-opacity: 0.9;
+    stroke-width: 2px;
+  }
+}
+
+.leaflet-zone-pulse {
+  animation: leafletPulse 2s infinite ease-in-out;
+}

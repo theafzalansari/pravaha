@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Circle, Tooltip } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 import {
   Activity,
   Bell,
@@ -17,6 +19,39 @@ import {
 import "./App.css";
 
 type DemoMode = "NORMAL" | "RISING" | "HIGH" | "CRITICAL";
+
+const ZONE_LOCATIONS: Record<
+  string,
+  { lat: number; lng: number; radius: number; description: string }
+> = {
+  "Zone A": {
+    lat: 20.0095,
+    lng: 73.7905,
+    radius: 230,
+    description: "Ramkund Ghats",
+  },
+  "Zone B": {
+    lat: 20.0075,
+    lng: 73.797,
+    radius: 270,
+    description: "Kalaram Temple",
+  },
+  "Zone C": {
+    lat: 20.0032,
+    lng: 73.7935,
+    radius: 250,
+    description: "Tapovan Entry",
+  },
+};
+
+const getZoneHexColor = (risk: string) => {
+  const r = (risk || "").toUpperCase();
+  if (r === "CRITICAL") return "#c94b3d";
+  if (r === "HIGH") return "#d87535";
+  if (r === "WARNING" || r === "RISING") return "#c79528";
+  return "#3d9560";
+};
+
 
 interface Zone {
   name: string;
@@ -490,54 +525,67 @@ function App() {
               </button>
             </div>
 
-            <div className="heatmap">
-              <div className="map-pattern" />
-
-              {/* ZONE A */}
-
-              <button
-                className={`zone zone-a ${getZone("Zone A").color} ${
-                  selectedZone === "Zone A" ? "selected" : ""
-                }`}
-                onClick={() => setSelectedZone("Zone A")}
+            <div className="heatmap leaflet-map-container">
+              <MapContainer
+                center={[20.0067, 73.7936]}
+                zoom={15}
+                scrollWheelZoom={false}
+                style={{ height: "100%", width: "100%", borderRadius: "8px" }}
               >
-                <strong>A</strong>
-                <span>{getZone("Zone A").people}%</span>
-              </button>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
 
-              {/* ZONE B */}
+                {(["Zone A", "Zone B", "Zone C"] as const).map((zoneName) => {
+                  const z = getZone(zoneName);
+                  const loc = ZONE_LOCATIONS[zoneName];
+                  const color = getZoneHexColor(z.risk);
+                  const isSelected = selectedZone === zoneName;
+                  const isHighRisk =
+                    z.risk.toUpperCase() === "HIGH" ||
+                    z.risk.toUpperCase() === "CRITICAL";
 
-              <button
-                className={`zone zone-b ${getZone("Zone B").color} ${
-                  selectedZone === "Zone B" ? "selected" : ""
-                }`}
-                onClick={() => setSelectedZone("Zone B")}
-              >
-                <strong>B</strong>
-                <span>{getZone("Zone B").people}%</span>
-              </button>
-
-              {/* ZONE C */}
-
-              <button
-                className={`zone zone-c ${getZone("Zone C").color} ${
-                  selectedZone === "Zone C" ? "selected" : ""
-                }`}
-                onClick={() => setSelectedZone("Zone C")}
-              >
-                <strong>C</strong>
-                <span>{getZone("Zone C").people}%</span>
-              </button>
-
-              <div className="map-flow flow-arrow-one">↓</div>
-
-              <div className="map-flow flow-arrow-two">→</div>
-
-              <div className="map-flow flow-arrow-three">↓</div>
-
-              <div className="map-label entry">ENTRY</div>
-
-              <div className="map-label exit">EXIT</div>
+                  return (
+                    <Circle
+                      key={zoneName}
+                      center={[loc.lat, loc.lng]}
+                      radius={loc.radius}
+                      pathOptions={{
+                        color: isSelected ? "#c88732" : color,
+                        fillColor: color,
+                        fillOpacity: isSelected ? 0.5 : 0.35,
+                        weight: isSelected ? 3 : 2,
+                        dashArray: isSelected ? "4, 4" : undefined,
+                        className: isHighRisk
+                          ? "leaflet-zone-pulse"
+                          : isSelected
+                          ? "leaflet-zone-selected"
+                          : "",
+                      }}
+                      eventHandlers={{
+                        click: () => setSelectedZone(zoneName),
+                      }}
+                    >
+                      <Tooltip
+                        permanent
+                        direction="center"
+                        className={`zone-leaflet-tooltip ${
+                          isSelected ? "selected" : ""
+                        }`}
+                      >
+                        <div
+                          className="zone-tooltip-content"
+                          onClick={() => setSelectedZone(zoneName)}
+                        >
+                          <strong>{zoneName.replace("Zone ", "Zone ")}</strong>
+                          <span>{z.people}% Occupancy</span>
+                        </div>
+                      </Tooltip>
+                    </Circle>
+                  );
+                })}
+              </MapContainer>
             </div>
 
             {/* MAP LEGEND */}
