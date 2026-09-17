@@ -293,10 +293,248 @@ const INSIGHTS: Record<DemoMode, string> = {
   CRITICAL: "Zone B has reached critical occupancy. Restrict entry and redirect flow.",
 };
 
+interface AlertItem {
+  id: string;
+  risk: "CRITICAL" | "HIGH" | "WARNING" | "SAFE" | "RESOLVED";
+  color: "critical" | "high" | "warning" | "safe";
+  zone: "Zone A" | "Zone B" | "Zone C";
+  time: string;
+  title: string;
+  description: string;
+  occupancy: number;
+  prediction?: string;
+  action: string;
+  status: "ACTIVE" | "RESOLVED";
+}
+
+const DEMO_ALERTS: Record<DemoMode, AlertItem[]> = {
+  CRITICAL: [
+    {
+      id: "alt-1",
+      risk: "CRITICAL",
+      color: "critical",
+      zone: "Zone B",
+      time: "10:52 AM",
+      title: "Stampede Risk & Critical Overload",
+      description: "Crowd occupancy reached critical level in Zone B. Immediate intervention required!",
+      occupancy: 92,
+      prediction: "Critical",
+      action: "Restrict entry + Redirect flow + Deploy personnel",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-2",
+      risk: "HIGH",
+      color: "high",
+      zone: "Zone C",
+      time: "10:48 AM",
+      title: "Heavy Entry Flow Bottleneck",
+      description: "Tapovan Entry approach corridor experiencing severe slowdown.",
+      occupancy: 65,
+      prediction: "Rising",
+      action: "Redirect incoming flow + deploy personnel",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-3",
+      risk: "WARNING",
+      color: "warning",
+      zone: "Zone A",
+      time: "10:40 AM",
+      title: "Elevated Crowd Density",
+      description: "Ramkund Ghats Sector A density approaching warning threshold.",
+      occupancy: 55,
+      prediction: "Crowd Rising",
+      action: "Monitor closely",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-4",
+      risk: "RESOLVED",
+      color: "safe",
+      zone: "Zone A",
+      time: "10:15 AM",
+      title: "Ghat Gate Clearance",
+      description: "Temporary congestion resolved following gate opening.",
+      occupancy: 42,
+      prediction: "Stable",
+      action: "Continue normal monitoring",
+      status: "RESOLVED",
+    },
+  ],
+  HIGH: [
+    {
+      id: "alt-1",
+      risk: "HIGH",
+      color: "high",
+      zone: "Zone B",
+      time: "10:48 AM",
+      title: "Crowd Density Increasing Rapidly",
+      description: "High crowd density detected in Zone B (Kalaram Temple Sector).",
+      occupancy: 78,
+      prediction: "Congestion Likely",
+      action: "Redirect incoming flow + deploy personnel",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-2",
+      risk: "WARNING",
+      color: "warning",
+      zone: "Zone C",
+      time: "10:42 AM",
+      title: "Approach Route Slowdown",
+      description: "Zone C occupancy rising as pilgrims divert from main bridge.",
+      occupancy: 61,
+      prediction: "Crowd Rising",
+      action: "Monitor closely",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-3",
+      risk: "WARNING",
+      color: "warning",
+      zone: "Zone A",
+      time: "10:35 AM",
+      title: "Moderate Crowd Accumulation",
+      description: "Ramkund sector experiencing steady crowd buildup.",
+      occupancy: 52,
+      prediction: "Crowd Rising",
+      action: "Monitor closely",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-4",
+      risk: "RESOLVED",
+      color: "safe",
+      zone: "Zone B",
+      time: "09:50 AM",
+      title: "Morning Queue Clearance",
+      description: "Temple courtyard queue cleared smoothly.",
+      occupancy: 45,
+      prediction: "Stable",
+      action: "Continue normal monitoring",
+      status: "RESOLVED",
+    },
+  ],
+  RISING: [
+    {
+      id: "alt-1",
+      risk: "WARNING",
+      color: "warning",
+      zone: "Zone B",
+      time: "10:45 AM",
+      title: "Crowd Level Requires Monitoring",
+      description: "Occupancy in Zone B rising steadily above baseline.",
+      occupancy: 68,
+      prediction: "Crowd Rising",
+      action: "Monitor closely",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-2",
+      risk: "WARNING",
+      color: "warning",
+      zone: "Zone C",
+      time: "10:38 AM",
+      title: "Entry Sector Inflow Increase",
+      description: "Inflow from Tapovan bridge sector increasing.",
+      occupancy: 52,
+      prediction: "Crowd Rising",
+      action: "Monitor closely",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-3",
+      risk: "SAFE",
+      color: "safe",
+      zone: "Zone A",
+      time: "10:20 AM",
+      title: "Zone A Stable Capacity",
+      description: "Ramkund Ghats operating within safe parameters.",
+      occupancy: 48,
+      prediction: "Stable",
+      action: "Continue normal monitoring",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-4",
+      risk: "RESOLVED",
+      color: "safe",
+      zone: "Zone C",
+      time: "09:30 AM",
+      title: "Bridge Flow Regularized",
+      description: "Flow rate on Tapovan entry bridge normalized.",
+      occupancy: 38,
+      prediction: "Stable",
+      action: "Continue normal monitoring",
+      status: "RESOLVED",
+    },
+  ],
+  NORMAL: [
+    {
+      id: "alt-1",
+      risk: "SAFE",
+      color: "safe",
+      zone: "Zone A",
+      time: "10:45 AM",
+      title: "Zone A Normal Operations",
+      description: "Zone operating within safe capacity at Ramkund Ghats.",
+      occupancy: 42,
+      prediction: "Stable",
+      action: "Continue normal monitoring",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-2",
+      risk: "SAFE",
+      color: "safe",
+      zone: "Zone B",
+      time: "10:40 AM",
+      title: "Zone B Normal Operations",
+      description: "Kalaram Temple Sector operating comfortably below capacity.",
+      occupancy: 42,
+      prediction: "Stable",
+      action: "Continue normal monitoring",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-3",
+      risk: "SAFE",
+      color: "safe",
+      zone: "Zone C",
+      time: "10:30 AM",
+      title: "Zone C Normal Operations",
+      description: "Tapovan Entry sector flow smooth and unrestricted.",
+      occupancy: 38,
+      prediction: "Stable",
+      action: "Continue normal monitoring",
+      status: "ACTIVE",
+    },
+    {
+      id: "alt-4",
+      risk: "RESOLVED",
+      color: "safe",
+      zone: "Zone B",
+      time: "09:15 AM",
+      title: "Morning Routine Check",
+      description: "All automated detection cameras calibrated and operational.",
+      occupancy: 35,
+      prediction: "Stable",
+      action: "Continue normal monitoring",
+      status: "RESOLVED",
+    },
+  ],
+};
+
 function App() {
   const [demoMode, setDemoMode] = useState<DemoMode>("HIGH");
   const [selectedZone, setSelectedZone] = useState("Zone B");
-  const [activeTab, setActiveTab] = useState<"dashboard" | "ivr" | "analytics">("dashboard");
+  const [activeTab, setActiveTab] = useState<
+    "dashboard" | "ivr" | "analytics" | "cameras" | "crowd-map" | "alerts"
+  >("dashboard");
+  const [alertFilter, setAlertFilter] = useState<
+    "All" | "Critical" | "High" | "Warning" | "Resolved"
+  >("All");
   const [selectedFlowModal, setSelectedFlowModal] = useState<"standard" | "extreme" | null>(null);
   const [, setApiData] = useState<any | null>(null);
 
@@ -315,6 +553,20 @@ function App() {
     zones.find((zone) => zone.name === selectedZone) || zones[0];
   const getZone = (name: string) =>
     zones.find((z) => z.name === name) || zones[0];
+
+  const alertsList = DEMO_ALERTS[demoMode] || [];
+  const criticalCount = alertsList.filter((a) => a.risk === "CRITICAL").length;
+  const highCount = alertsList.filter((a) => a.risk === "HIGH").length;
+  const activeCount = alertsList.filter((a) => a.status === "ACTIVE").length;
+
+  const filteredAlerts = alertsList.filter((alert) => {
+    if (alertFilter === "All") return true;
+    if (alertFilter === "Critical") return alert.risk === "CRITICAL";
+    if (alertFilter === "High") return alert.risk === "HIGH";
+    if (alertFilter === "Warning") return alert.risk === "WARNING";
+    if (alertFilter === "Resolved") return alert.status === "RESOLVED" || alert.risk === "RESOLVED";
+    return true;
+  });
 
   return (
     <div className="app">
@@ -352,24 +604,24 @@ function App() {
           </button>
 
           <button
-            className="nav-item"
-            onClick={() => setActiveTab("dashboard")}
+            className={`nav-item ${activeTab === "crowd-map" ? "active" : ""}`}
+            onClick={() => setActiveTab("crowd-map")}
           >
             <Map size={18} />
             Crowd Map
           </button>
 
           <button
-            className="nav-item"
-            onClick={() => setActiveTab("dashboard")}
+            className={`nav-item ${activeTab === "cameras" ? "active" : ""}`}
+            onClick={() => setActiveTab("cameras")}
           >
             <Camera size={18} />
             Live Cameras
           </button>
 
           <button
-            className="nav-item"
-            onClick={() => setActiveTab("dashboard")}
+            className={`nav-item ${activeTab === "alerts" ? "active" : ""}`}
+            onClick={() => setActiveTab("alerts")}
           >
             <Bell size={18} />
             Alerts
@@ -432,6 +684,12 @@ function App() {
                 ? "Emergency IVR"
                 : activeTab === "analytics"
                 ? "Analytics"
+                : activeTab === "cameras"
+                ? "Live Cameras"
+                : activeTab === "crowd-map"
+                ? "Crowd Map"
+                : activeTab === "alerts"
+                ? "Alerts"
                 : "Command Center"}
             </h2>
           </div>
@@ -1133,7 +1391,7 @@ function App() {
               </div>
             </div>
           </div>
-        ) : (
+        ) : activeTab === "analytics" ? (
           /* =====================================================
              ANALYTICS PAGE
              ===================================================== */
@@ -1377,6 +1635,424 @@ function App() {
                   <strong>{scenario.recommendation}</strong>
                 </div>
               </div>
+            </div>
+          </div>
+        ) : activeTab === "cameras" ? (
+          /* =====================================================
+             LIVE CAMERAS PAGE
+             ===================================================== */
+          <div className="cameras-page-container">
+            {/* 1. HEADER */}
+            <div className="panel cameras-header-panel">
+              <div className="cameras-header-info">
+                <span className="welcome-tag">
+                  <Camera size={15} />
+                  AI VISION PIPELINE
+                </span>
+                <h3>Live Cameras</h3>
+                <p>Real-time AI vision across monitored areas</p>
+              </div>
+              <div className="live-camera-status-badge">
+                <span className="online-dot" />
+                <span>LIVE MONITORING</span>
+              </div>
+            </div>
+
+            {/* 2. MAIN CAMERA DISPLAY CARD */}
+            <div className="panel main-camera-card">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">PRIMARY FEED</span>
+                  <h3>CAMERA 01</h3>
+                  <p className="panel-sub">Panchavati • Crowd Monitoring</p>
+                </div>
+                <div className="cam-live-indicator">
+                  <span className="pulse" />
+                  ● LIVE
+                </div>
+              </div>
+
+              <div className="camera-feed-viewport">
+                <video
+                  className="camera-video-player"
+                  src="/zones_web.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                />
+
+                {/* Top Overlay */}
+                <div className="cam-overlay-top">
+                  <span className="cam-overlay-title">CAMERA 01</span>
+                  <span className="cam-overlay-loc">PANCHAVATI</span>
+                  <span className="cam-overlay-live"><span className="pulse" /> ● LIVE</span>
+                </div>
+
+                {/* Bottom Overlay */}
+                <div className="cam-overlay-bottom">
+                  <span className="cam-tech-chip">YOLOv8n</span>
+                  <span className="cam-tech-chip">BYTETRACK</span>
+                  <span className="cam-tech-chip highlight">ZONE ANALYSIS ACTIVE</span>
+                </div>
+              </div>
+
+              {/* 4. CAMERA INFORMATION */}
+              <div className="camera-info-bar">
+                <div className="cam-info-item">
+                  <span>CAMERA STATUS</span>
+                  <strong className="safe-text">ONLINE</strong>
+                </div>
+                <div className="cam-info-item">
+                  <span>FEED TYPE</span>
+                  <strong>AI Processed Video</strong>
+                </div>
+                <div className="cam-info-item">
+                  <span>DETECTION MODEL</span>
+                  <strong>YOLOv8n Person</strong>
+                </div>
+                <div className="cam-info-item">
+                  <span>TRACKING ALGORITHM</span>
+                  <strong>ByteTrack</strong>
+                </div>
+                <div className="cam-info-item">
+                  <span>ZONE ANALYSIS</span>
+                  <strong className="amber-text">Active</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : activeTab === "crowd-map" ? (
+          /* =====================================================
+             CROWD MAP PAGE
+             ===================================================== */
+          <div className="crowd-map-page-container">
+            {/* 1. HEADER */}
+            <div className="panel crowd-map-header-panel">
+              <div className="crowd-map-header-info">
+                <span className="welcome-tag">
+                  <Map size={15} />
+                  SPATIAL INTELLIGENCE
+                </span>
+                <h3>Crowd Map</h3>
+                <p>Panchavati • Real-time zone intelligence</p>
+              </div>
+              <div className="live-status-badge">
+                <span className="online-dot" />
+                <span>LIVE MONITORING</span>
+              </div>
+            </div>
+
+            {/* 2. LARGE INTERACTIVE MAP */}
+            <div className="panel dedicated-map-panel">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">MONITORED SECTOR: NASHIK</span>
+                  <h3>Panchavati Command Map</h3>
+                  <p className="panel-sub">PRAVAHA Prototype Monitoring Zones A, B & C</p>
+                </div>
+
+                <div className="map-legend inline-legend">
+                  <span><i className="legend-safe" /> Safe</span>
+                  <span><i className="legend-warning" /> Warning</span>
+                  <span><i className="legend-high" /> High</span>
+                  <span><i className="legend-critical" /> Critical</span>
+                </div>
+              </div>
+
+              <div className="heatmap dedicated-map-container">
+                <MapContainer
+                  center={[20.0067, 73.7936]}
+                  zoom={15}
+                  scrollWheelZoom={true}
+                  style={{ height: "100%", width: "100%", borderRadius: "10px" }}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+
+                  {(["Zone A", "Zone B", "Zone C"] as const).map((zoneName) => {
+                    const z = getZone(zoneName);
+                    const loc = ZONE_LOCATIONS[zoneName];
+                    const color = getZoneHexColor(z.risk);
+                    const isSelected = selectedZone === zoneName;
+                    const isHighRisk =
+                      z.risk.toUpperCase() === "HIGH" ||
+                      z.risk.toUpperCase() === "CRITICAL";
+
+                    return (
+                      <Circle
+                        key={zoneName}
+                        center={[loc.lat, loc.lng]}
+                        radius={loc.radius}
+                        pathOptions={{
+                          color: isSelected ? "#c88732" : color,
+                          fillColor: color,
+                          fillOpacity: isSelected ? 0.55 : 0.38,
+                          weight: isSelected ? 3.5 : 2,
+                          dashArray: isSelected ? "4, 4" : undefined,
+                          className: isHighRisk
+                            ? "leaflet-zone-pulse"
+                            : isSelected
+                            ? "leaflet-zone-selected"
+                            : "",
+                        }}
+                        eventHandlers={{
+                          click: () => setSelectedZone(zoneName),
+                        }}
+                      >
+                        <Tooltip
+                          permanent
+                          direction="center"
+                          className={`zone-leaflet-tooltip ${
+                            isSelected ? "selected" : ""
+                          }`}
+                        >
+                          <div
+                            className="zone-tooltip-content"
+                            onClick={() => setSelectedZone(zoneName)}
+                          >
+                            <strong>{zoneName}</strong>
+                            <span>{z.people}% • {z.risk}</span>
+                          </div>
+                        </Tooltip>
+                      </Circle>
+                    );
+                  })}
+                </MapContainer>
+              </div>
+            </div>
+
+            {/* 4. SELECTED ZONE DETAILS */}
+            <div className="panel selected-zone-details-panel">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">INTERACTIVE INSPECTION</span>
+                  <h3>Selected Sector Details: {selected.name}</h3>
+                </div>
+
+                <span className={`status-pill ${selected.color}`}>
+                  {selected.risk}
+                </span>
+              </div>
+
+              <div className="zone-info">
+                <div className="zone-main">
+                  <h4>{selected.name}</h4>
+                  <span className="zone-sub">
+                    {ZONE_LOCATIONS[selected.name]?.description || "Primary monitored sector"}
+                  </span>
+                </div>
+
+                <div className="zone-metrics">
+                  <div className="metric">
+                    <span>OCCUPANCY</span>
+                    <strong>{selected.people}%</strong>
+                  </div>
+
+                  <div className="metric">
+                    <span>ESTIMATED PEOPLE</span>
+                    <strong>{selected.people}</strong>
+                  </div>
+
+                  <div className="metric">
+                    <span>RISK LEVEL</span>
+                    <strong className={selected.color}>{selected.risk}</strong>
+                  </div>
+
+                  <div className="metric">
+                    <span>PREDICTION</span>
+                    <strong>{selected.prediction}</strong>
+                  </div>
+                </div>
+
+                <div className="zone-action" style={{ marginTop: "12px" }}>
+                  <span>RECOMMENDED ACTION</span>
+                  <strong>{selected.action}</strong>
+                </div>
+              </div>
+            </div>
+
+            {/* 6. ZONE SUMMARY CARDS */}
+            <div className="zone-summary-cards-grid">
+              {(["Zone A", "Zone B", "Zone C"] as const).map((zName) => {
+                const zData = getZone(zName);
+                const isSelected = selectedZone === zName;
+                const loc = ZONE_LOCATIONS[zName];
+
+                return (
+                  <div
+                    key={zName}
+                    className={`panel zone-summary-card ${isSelected ? "selected" : ""}`}
+                    onClick={() => setSelectedZone(zName)}
+                  >
+                    <div className="zsc-header">
+                      <div>
+                        <h4>{zName}</h4>
+                        <small>{loc.description}</small>
+                      </div>
+                      <span className={`status-pill ${zData.color}`}>
+                        {zData.risk}
+                      </span>
+                    </div>
+
+                    <div className="zsc-metrics">
+                      <div>
+                        <span>PEOPLE</span>
+                        <strong>{zData.people}</strong>
+                      </div>
+                      <div>
+                        <span>OCCUPANCY</span>
+                        <strong>{zData.people}%</strong>
+                      </div>
+                    </div>
+
+                    <div className="zsc-progress">
+                      <div
+                        className={`zsc-bar ${zData.color}`}
+                        style={{ width: `${zData.people}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          /* =====================================================
+             ALERTS PAGE
+             ===================================================== */
+          <div className="alerts-page-container">
+            {/* 1. HEADER */}
+            <div className="panel alerts-header-panel">
+              <div className="alerts-header-info">
+                <span className="welcome-tag">
+                  <Bell size={15} />
+                  REAL-TIME ALERTS
+                </span>
+                <h3>Alerts</h3>
+                <p>Real-time crowd risks and emergency events requiring attention</p>
+              </div>
+              <div className="live-status-badge">
+                <span className="online-dot" />
+                <span>MONITORING ACTIVE</span>
+              </div>
+            </div>
+
+            {/* 2. SUMMARY CARDS */}
+            <div className="alerts-summary-grid">
+              <div className="panel summary-card">
+                <div className="card-top">
+                  <span>ALL ALERTS</span>
+                  <Bell size={18} className="icon-gold" />
+                </div>
+                <h3>{alertsList.length}</h3>
+                <small>Total logged events</small>
+              </div>
+
+              <div className="panel summary-card critical">
+                <div className="card-top">
+                  <span>CRITICAL</span>
+                  <ShieldAlert size={18} className="icon-critical" />
+                </div>
+                <h3>{criticalCount}</h3>
+                <small>Immediate action needed</small>
+              </div>
+
+              <div className="panel summary-card high">
+                <div className="card-top">
+                  <span>HIGH</span>
+                  <AlertTriangle size={18} className="icon-high" />
+                </div>
+                <h3>{highCount}</h3>
+                <small>Elevated risk areas</small>
+              </div>
+
+              <div className="panel summary-card active">
+                <div className="card-top">
+                  <span>ACTIVE</span>
+                  <Activity size={18} className="icon-active" />
+                </div>
+                <h3>{activeCount}</h3>
+                <small>Ongoing incidents</small>
+              </div>
+            </div>
+
+            {/* 4. FILTERS */}
+            <div className="panel alerts-filter-panel">
+              <span className="filter-label">FILTER ALERTS:</span>
+              <div className="filter-chips">
+                {(["All", "Critical", "High", "Warning", "Resolved"] as const).map((filter) => (
+                  <button
+                    key={filter}
+                    className={`filter-chip ${alertFilter === filter ? "active" : ""}`}
+                    onClick={() => setAlertFilter(filter)}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 3. ALERT LIST */}
+            <div className="alerts-list-container">
+              {filteredAlerts.length === 0 ? (
+                <div className="panel no-alerts-panel">
+                  <ShieldCheck size={36} style={{ color: "#3d9560", marginBottom: "8px" }} />
+                  <h4>No Alerts Found</h4>
+                  <p>There are no alerts matching the selected filter in current mode.</p>
+                </div>
+              ) : (
+                filteredAlerts.map((alert) => (
+                  <div key={alert.id} className={`panel alert-card ${alert.color}`}>
+                    <div className="alert-card-header">
+                      <div className="alert-badge-group">
+                        <span className={`status-pill ${alert.color}`}>
+                          {alert.risk}
+                        </span>
+                        <span className="alert-zone-tag">{alert.zone}</span>
+                        <span className="alert-time-tag">{alert.time}</span>
+                      </div>
+
+                      <button
+                        className="btn-view-zone"
+                        onClick={() => {
+                          setSelectedZone(alert.zone);
+                          setActiveTab("crowd-map");
+                        }}
+                      >
+                        View Zone <ChevronRight size={14} />
+                      </button>
+                    </div>
+
+                    <div className="alert-card-body">
+                      <h4>{alert.title}</h4>
+                      <p className="alert-desc">{alert.description}</p>
+
+                      <div className="alert-meta-grid">
+                        <div className="meta-item">
+                          <span>OCCUPANCY</span>
+                          <strong>{alert.occupancy}% occupancy</strong>
+                        </div>
+
+                        {alert.prediction && (
+                          <div className="meta-item">
+                            <span>PREDICTION</span>
+                            <strong>{alert.prediction}</strong>
+                          </div>
+                        )}
+
+                        <div className="meta-item action-item">
+                          <span>RECOMMENDED ACTION</span>
+                          <strong>{alert.action}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         )}
