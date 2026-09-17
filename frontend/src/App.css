@@ -1746,6 +1746,11 @@ footer {
    LEAFLET CROWD RISK MAP STYLES
    ========================================================= */
 
+.leaflet-container img.leaflet-tile {
+  max-width: none !important;
+  max-height: none !important;
+}
+
 .leaflet-map-container {
   height: 270px;
   position: relative;
