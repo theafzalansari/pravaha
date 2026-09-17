@@ -3,18 +3,27 @@ import { MapContainer, TileLayer, Circle, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import {
   Activity,
+  AlertTriangle,
   Bell,
   Camera,
   ChevronRight,
   CircleAlert,
+  FileText,
   Gauge,
+  HelpCircle,
+  Layers,
   LayoutDashboard,
   Map,
+  Phone,
   Radio,
   Settings,
+  ShieldAlert,
   ShieldCheck,
+  UserX,
   Users,
   Waves,
+  X,
+  Zap,
 } from "lucide-react";
 import "./App.css";
 
@@ -242,6 +251,8 @@ const DEMO_SCENARIOS: Record<DemoMode, DashboardScenario> = {
 function App() {
   const [demoMode, setDemoMode] = useState<DemoMode>("HIGH");
   const [selectedZone, setSelectedZone] = useState("Zone B");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "ivr">("dashboard");
+  const [selectedFlowModal, setSelectedFlowModal] = useState<"standard" | "extreme" | null>(null);
   const [, setApiData] = useState<any | null>(null);
 
   useEffect(() => {
@@ -287,40 +298,61 @@ function App() {
         <nav>
           <p className="nav-label">COMMAND CENTER</p>
 
-          <button className="nav-item active">
+          <button
+            className={`nav-item ${activeTab === "dashboard" ? "active" : ""}`}
+            onClick={() => setActiveTab("dashboard")}
+          >
             <LayoutDashboard size={18} />
             Dashboard
           </button>
 
-          <button className="nav-item">
+          <button
+            className="nav-item"
+            onClick={() => setActiveTab("dashboard")}
+          >
             <Map size={18} />
             Crowd Map
           </button>
 
-          <button className="nav-item">
+          <button
+            className="nav-item"
+            onClick={() => setActiveTab("dashboard")}
+          >
             <Camera size={18} />
             Live Cameras
           </button>
 
-          <button className="nav-item">
+          <button
+            className="nav-item"
+            onClick={() => setActiveTab("dashboard")}
+          >
             <Bell size={18} />
             Alerts
             <span className="alert-count">{scenario.active_alerts}</span>
           </button>
 
-          <button className="nav-item">
+          <button
+            className={`nav-item ${activeTab === "ivr" ? "active" : ""}`}
+            onClick={() => setActiveTab("ivr")}
+          >
             <Radio size={18} />
             Emergency IVR
           </button>
 
           <p className="nav-label second">SYSTEM</p>
 
-          <button className="nav-item">
+          <button
+            className="nav-item"
+            onClick={() => setActiveTab("dashboard")}
+          >
             <Activity size={18} />
             Analytics
           </button>
 
-          <button className="nav-item">
+          <button
+            className="nav-item"
+            onClick={() => setActiveTab("dashboard")}
+          >
             <Settings size={18} />
             Settings
           </button>
@@ -350,7 +382,7 @@ function App() {
         <header className="topbar">
           <div>
             <p className="eyebrow">KUMBH MELA • AUTHORITY VIEW</p>
-            <h2>Command Center</h2>
+            <h2>{activeTab === "ivr" ? "Emergency IVR" : "Command Center"}</h2>
           </div>
 
           {/* DEMO MODE CONTROLLER */}
@@ -379,11 +411,13 @@ function App() {
           </div>
         </header>
 
-        {/* =====================================================
-            WELCOME
-            ===================================================== */}
+        {activeTab === "dashboard" ? (
+          <>
+            {/* =====================================================
+                WELCOME
+                ===================================================== */}
 
-        <section className="welcome">
+            <section className="welcome">
           <div>
             <span className="welcome-tag">
               <ShieldCheck size={15} />
@@ -745,6 +779,422 @@ function App() {
             </div>
           </div>
         </section>
+      </>
+    ) : (
+          /* =====================================================
+             EMERGENCY IVR PAGE
+             ===================================================== */
+          <div className="ivr-page-container">
+            {/* 1. HEADER */}
+            <div className="panel ivr-header-panel">
+              <div className="ivr-header-info">
+                <span className="welcome-tag">
+                  <Radio size={15} />
+                  EXOTEL VOICE GATEWAY
+                </span>
+                <h3>Emergency IVR</h3>
+                <p>Voice-based emergency reporting and rapid response</p>
+              </div>
+              <div className="ivr-status-indicator">
+                <span className="online-dot" />
+                <span>SYSTEM ONLINE</span>
+              </div>
+            </div>
+
+            {/* 2. TWO IVR CARDS SIDE BY SIDE */}
+            <div className="ivr-cards-grid">
+              {/* CARD 1: Standard IVR */}
+              <div className="panel ivr-card standard-card">
+                <div className="ivr-card-top">
+                  <div className="ivr-icon-badge standard">
+                    <Phone size={22} />
+                  </div>
+                  <div>
+                    <span className="panel-kicker">GUIDED HELPLINE</span>
+                    <h3>Standard IVR</h3>
+                    <p>Guided emergency and assistance reporting</p>
+                  </div>
+                </div>
+
+                <div className="ivr-stats-row">
+                  <div className="ivr-stat-box">
+                    <span>Calls Today</span>
+                    <strong>24</strong>
+                  </div>
+                  <div className="ivr-stat-box">
+                    <span>Active Reports</span>
+                    <strong className="amber-text">3</strong>
+                  </div>
+                </div>
+
+                <div className="ivr-flow-preview-box">
+                  <span className="preview-heading">IVR ROUTING FLOW</span>
+                  <div className="flow-step-line">
+                    <span>Language</span>
+                    <ChevronRight size={12} />
+                    <span>Issue</span>
+                    <ChevronRight size={12} />
+                    <span>Zone</span>
+                    <ChevronRight size={12} />
+                    <span className="highlight-tag">Incident</span>
+                  </div>
+                </div>
+
+                <div className="supported-options-box">
+                  <span className="preview-heading">SUPPORTED OPTIONS</span>
+                  <div className="options-chips">
+                    <span className="chip"><ShieldAlert size={12} /> Emergency Help</span>
+                    <span className="chip"><Users size={12} /> Crowd Issue</span>
+                    <span className="chip"><UserX size={12} /> Missing Person</span>
+                    <span className="chip"><HelpCircle size={12} /> Volunteer / Help Desk</span>
+                  </div>
+                </div>
+
+                <button className="btn-view-flow" onClick={() => setSelectedFlowModal("standard")}>
+                  <FileText size={15} />
+                  View Flow
+                </button>
+              </div>
+
+              {/* CARD 2: Extreme Emergency IVR */}
+              <div className="panel ivr-card extreme-card">
+                <div className="ivr-card-top">
+                  <div className="ivr-icon-badge extreme">
+                    <Zap size={22} />
+                  </div>
+                  <div>
+                    <div className="priority-tag"><AlertTriangle size={12} /> HIGH PRIORITY</div>
+                    <h3>Extreme Emergency IVR </h3>
+                    <p>Minimal-step emergency reporting</p>
+                  </div>
+                </div>
+
+                <div className="ivr-stats-row">
+                  <div className="ivr-stat-box">
+                    <span>Calls Today</span>
+                    <strong>7</strong>
+                  </div>
+                  <div className="ivr-stat-box">
+                    <span>Critical Reports</span>
+                    <strong className="red-text">2</strong>
+                  </div>
+                </div>
+
+                <div className="ivr-flow-preview-box urgent">
+                  <span className="preview-heading">MINIMAL STEP FLOW</span>
+                  <div className="flow-step-line urgent">
+                    <span>Call</span>
+                    <ChevronRight size={12} />
+                    <span className="press-one">Press 1</span>
+                    <ChevronRight size={12} />
+                    <span>Zone</span>
+                    <ChevronRight size={12} />
+                    <span className="alert-tag">Instant Alert</span>
+                  </div>
+                </div>
+
+                <div className="extreme-notice-box">
+                  <AlertTriangle size={15} />
+                  <span>Designed for situations where every second matters.</span>
+                </div>
+
+                <button className="btn-view-flow extreme" onClick={() => setSelectedFlowModal("extreme")}>
+                  <Zap size={15} />
+                  View Flow
+                </button>
+              </div>
+            </div>
+
+            {/* 3. IVR FLOW SECTION */}
+            <div className="panel ivr-flow-section">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">AUTOMATED CALL PIPELINE</span>
+                  <h3>IVR Flow Visualizer</h3>
+                </div>
+              </div>
+
+              <div className="visual-flows-grid">
+                {/* Standard IVR Flow */}
+                <div className="visual-flow-card">
+                  <div className="flow-card-header">
+                    <Phone size={16} />
+                    <strong>STANDARD IVR FLOW</strong>
+                  </div>
+                  <div className="flow-nodes-horizontal">
+                    <div className="node"><span>1</span>CALL</div>
+                    <div className="arrow">→</div>
+                    <div className="node"><span>2</span>LANGUAGE</div>
+                    <div className="arrow">→</div>
+                    <div className="node"><span>3</span>ASSISTANCE TYPE</div>
+                    <div className="arrow">→</div>
+                    <div className="node"><span>4</span>ZONE</div>
+                    <div className="arrow">→</div>
+                    <div className="node"><span>5</span>INCIDENT CREATED</div>
+                    <div className="arrow">→</div>
+                    <div className="node alert-node"><span>6</span>AUTHORITY ALERT</div>
+                  </div>
+                </div>
+
+                {/* Extreme IVR Flow */}
+                <div className="visual-flow-card extreme">
+                  <div className="flow-card-header extreme">
+                    <Zap size={16} />
+                    <strong>EXTREME EMERGENCY IVR FLOW</strong>
+                  </div>
+                  <div className="flow-nodes-horizontal">
+                    <div className="node extreme"><span>1</span>CALL</div>
+                    <div className="arrow">→</div>
+                    <div className="node urgent"><span>2</span>PRESS 1</div>
+                    <div className="arrow">→</div>
+                    <div className="node extreme"><span>3</span>ZONE</div>
+                    <div className="arrow">→</div>
+                    <div className="node critical"><span>4</span>CRITICAL ALERT</div>
+                    <div className="arrow">→</div>
+                    <div className="node response"><span>5</span>AUTHORITY RESPONSE</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 4. RECENT IVR INCIDENTS TABLE */}
+            <div className="panel ivr-table-panel">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">LIVE CALL DISPATCH LOG</span>
+                  <h3>Recent IVR Incidents</h3>
+                </div>
+                <span className="live-pulse-badge">
+                  <span className="pulse-dot" /> LIVE FEED
+                </span>
+              </div>
+
+              <div className="table-responsive">
+                <table className="ivr-incidents-table">
+                  <thead>
+                    <tr>
+                      <th>TYPE</th>
+                      <th>IVR CHANNEL</th>
+                      <th>ZONE</th>
+                      <th>STATUS</th>
+                      <th>TIME</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span className="incident-type"><ShieldAlert size={14} /> Medical</span>
+                      </td>
+                      <td><span className="channel-badge extreme">Extreme IVR</span></td>
+                      <td><strong>Zone A</strong></td>
+                      <td><span className="status-badge critical">CRITICAL</span></td>
+                      <td>12:12 PM</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span className="incident-type"><Users size={14} /> Crowd Issue</span>
+                      </td>
+                      <td><span className="channel-badge standard">Standard IVR</span></td>
+                      <td><strong>Zone B</strong></td>
+                      <td><span className="status-badge safe">RESOLVED</span></td>
+                      <td>5:04 PM</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span className="incident-type"><Zap size={14} /> Extreme Emergency</span>
+                      </td>
+                      <td><span className="channel-badge extreme">Extreme IVR</span></td>
+                      <td><strong>Zone C</strong></td>
+                      <td><span className="status-badge critical">CRITICAL</span></td>
+                      <td>4:58 PM</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span className="incident-type"><AlertTriangle size={14} /> Blocked Route</span>
+                      </td>
+                      <td><span className="channel-badge standard">Standard IVR</span></td>
+                      <td><strong>Zone B</strong></td>
+                      <td><span className="status-badge warning">ACTIVE</span></td>
+                      <td>4:42 PM</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span className="incident-type"><Zap size={14} /> Extreme Emergency</span>
+                      </td>
+                      <td><span className="channel-badge extreme">Extreme IVR</span></td>
+                      <td><strong>Zone B</strong></td>
+                      <td><span className="status-badge critical">CRITICAL</span></td>
+                      <td>4:31 PM</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* 5. HOW IT WORKS SECTION */}
+            <div className="panel how-it-works-panel">
+              <div className="panel-header">
+                <div>
+                  <span className="panel-kicker">ARCHITECTURE OVERVIEW</span>
+                  <h3>How It Works</h3>
+                </div>
+              </div>
+
+              <p className="architecture-text">
+                Both IVR channels feed into the same PRAVAHA incident and alert system.
+              </p>
+
+              <div className="arch-flow-visual">
+                <div className="arch-channels-column">
+                  <div className="arch-channel-box standard">
+                    <Phone size={16} /> STANDARD IVR
+                  </div>
+                  <div className="arch-channel-box extreme">
+                    <Zap size={16} /> EXTREME IVR
+                  </div>
+                </div>
+
+                <div className="arch-connector-branch">
+                  <div className="branch-lines" />
+                  <span className="arrow-head">→</span>
+                </div>
+
+                <div className="arch-center-box">
+                  <Layers size={18} />
+                  <div>
+                    <strong>INCIDENT ENGINE</strong>
+                    <small>AI Triage & Geo-Tagging</small>
+                  </div>
+                </div>
+
+                <div className="arch-connector-straight">
+                  <div className="line-bar" />
+                  <span className="arrow-head">→</span>
+                </div>
+
+                <div className="arch-dest-box">
+                  <LayoutDashboard size={18} />
+                  <div>
+                    <strong>AUTHORITY DASHBOARD</strong>
+                    <small>Command & Control Center</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* INTERACTIVE FLOW MODAL */}
+        {selectedFlowModal && (
+          <div className="modal-backdrop" onClick={() => setSelectedFlowModal(null)}>
+            <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <div className="modal-title-group">
+                  {selectedFlowModal === "standard" ? (
+                    <div className="modal-icon-badge standard"><Phone size={20} /></div>
+                  ) : (
+                    <div className="modal-icon-badge extreme"><Zap size={20} /></div>
+                  )}
+                  <div>
+                    <h3>
+                      {selectedFlowModal === "standard"
+                        ? "Standard IVR - Step-by-Step Flow"
+                        : "Extreme Emergency IVR - Step-by-Step Flow"}
+                    </h3>
+                    <p>Interactive Call Logic Simulation</p>
+                  </div>
+                </div>
+                <button className="modal-close-btn" onClick={() => setSelectedFlowModal(null)}>
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="modal-body">
+                {selectedFlowModal === "standard" ? (
+                  <div className="flow-steps-list">
+                    <div className="step-item">
+                      <div className="step-badge">STEP 1</div>
+                      <div className="step-content">
+                        <strong>CALL INITIATION</strong>
+                        <p>Citizen calls PRAVAHA IVR Helpline.</p>
+                        <div className="audio-bubble">🔊 "Welcome to Kumbh Mela Emergency Helpline."</div>
+                      </div>
+                    </div>
+                    <div className="step-item">
+                      <div className="step-badge">STEP 2</div>
+                      <div className="step-content">
+                        <strong>LANGUAGE SELECTION</strong>
+                        <p>User selects preferred audio language.</p>
+                        <div className="audio-bubble">🔊 "Press 1 for Hindi, Press 2 for Marathi, Press 3 for English."</div>
+                      </div>
+                    </div>
+                    <div className="step-item">
+                      <div className="step-badge">STEP 3</div>
+                      <div className="step-content">
+                        <strong>ISSUE CATEGORY</strong>
+                        <p>User selects type of emergency assistance.</p>
+                        <div className="audio-bubble">🔊 "Press 1 Medical, Press 2 Stampede/Crowd, Press 3 Missing Person."</div>
+                      </div>
+                    </div>
+                    <div className="step-item">
+                      <div className="step-badge">STEP 4</div>
+                      <div className="step-content">
+                        <strong>ZONE CONFIRMATION</strong>
+                        <p>User selects current location zone.</p>
+                        <div className="audio-bubble">🔊 "Press 1 for Ramkund (Zone A), Press 2 for Kalaram (Zone B), Press 3 for Tapovan (Zone C)."</div>
+                      </div>
+                    </div>
+                    <div className="step-item final">
+                      <div className="step-badge final">STEP 5</div>
+                      <div className="step-content">
+                        <strong>INCIDENT CREATED & DISPATCHED</strong>
+                        <p>System automatically registers ticket and alerts command center.</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flow-steps-list extreme">
+                    <div className="step-item extreme">
+                      <div className="step-badge extreme">STEP 1</div>
+                      <div className="step-content">
+                        <strong>CRITICAL EMERGENCY CALL</strong>
+                        <p>Caller dials Emergency Hotline.</p>
+                        <div className="audio-bubble urgent">🔊 "PRAVAHA Extreme Hotline. Press 1 NOW for immediate SOS."</div>
+                      </div>
+                    </div>
+                    <div className="step-item urgent">
+                      <div className="step-badge urgent">STEP 2</div>
+                      <div className="step-content">
+                        <strong>PRESS 1 (INSTANT OVERRIDE)</strong>
+                        <p>Bypasses all language and category menus instantly.</p>
+                      </div>
+                    </div>
+                    <div className="step-item extreme">
+                      <div className="step-badge extreme">STEP 3</div>
+                      <div className="step-content">
+                        <strong>ONE-DIGIT ZONE SELECTION</strong>
+                        <p>Quick DTMF input: 1 for Zone A, 2 for Zone B, 3 for Zone C.</p>
+                      </div>
+                    </div>
+                    <div className="step-item final-critical">
+                      <div className="step-badge critical">STEP 4</div>
+                      <div className="step-content">
+                        <strong>CRITICAL ALERT & RAPID DISPATCH</strong>
+                        <p>Instant high-priority alarm triggered on Authority Dashboard. Quick Response Team dispatched in under 30 seconds.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="modal-footer">
+                <button className="btn-modal-close" onClick={() => setSelectedFlowModal(null)}>
+                  Close Flow View
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* FOOTER */}
 
