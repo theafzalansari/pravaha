@@ -1526,7 +1526,7 @@ footer {
    ========================================================= */
 
 .video-container {
-  height: 1200px;
+  height: 350px;
   position: relative;
   overflow: hidden;
 
@@ -1599,6 +1599,131 @@ footer {
   gap: 8px;
 
   pointer-events: none;
+}
+
+
+/* =========================================================
+   DEMO MODE CONTROLLER & DYNAMIC RISK STYLES
+   ========================================================= */
+
+.demo-mode-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #faf8f3;
+  border: 1px solid #ebdcc6;
+  border-radius: 9999px;
+  padding: 4px 6px 4px 12px;
+  box-shadow: 0 2px 8px rgba(43, 37, 27, 0.04);
+}
+
+.demo-label {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--saffron-dark);
+}
+
+.demo-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #77736c;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 5px 11px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.demo-btn:hover {
+  background: #f0e6d6;
+  color: #24221e;
+}
+
+.demo-btn.active {
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.demo-btn.active.normal {
+  background: var(--safe);
+  border-color: #2f794c;
+}
+
+.demo-btn.active.rising {
+  background: var(--warning);
+  border-color: #a87b1c;
+}
+
+.demo-btn.active.high {
+  background: var(--high);
+  border-color: #b85a1c;
+}
+
+.demo-btn.active.critical {
+  background: var(--critical);
+  border-color: #a8382c;
+  animation: pulseBtn 1.5s infinite;
+}
+
+@keyframes pulseBtn {
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.zone.safe {
+  color: #3d8b59;
+  background: rgba(61, 149, 96, 0.13);
+  border-color: rgba(61, 149, 96, 0.5);
+  animation: none;
+}
+
+.zone.warning {
+  color: #b08725;
+  background: rgba(199, 149, 40, 0.13);
+  border-color: rgba(199, 149, 40, 0.5);
+  animation: none;
+}
+
+.zone.high {
+  color: #bd6230;
+  background: rgba(216, 117, 53, 0.14);
+  border-color: rgba(216, 117, 53, 0.55);
+  animation: none;
+}
+
+.zone.critical {
+  color: #c45140;
+  background: rgba(201, 75, 61, 0.16);
+  border-color: rgba(201, 75, 61, 0.6);
+  animation: riskPulse 1.5s ease-in-out infinite;
+}
+
+.critical-badge.safe,
+.alert-symbol.safe {
+  color: #388552;
+  background: #edf7f0;
+}
+
+.critical-badge.warning,
+.alert-symbol.warning {
+  color: #9c7921;
+  background: #faf5e4;
+}
+
+.critical-badge.high,
+.alert-symbol.high {
+  color: #bd6230;
+  background: #fff0e8;
+}
+
+.critical-badge.critical,
+.alert-symbol.critical {
+  color: #bd4d40;
+  background: #fff0ed;
 }
 
 .video-bottom-overlay span {

@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import "./App.css";
 
+type DemoMode = "NORMAL" | "RISING" | "HIGH" | "CRITICAL";
+
 interface Zone {
   name: string;
   people: number;
@@ -26,73 +28,198 @@ interface Zone {
   action: string;
 }
 
-interface DashboardData {
+interface DashboardScenario {
   total_crowd: number;
   average_density: number;
   active_alerts: number;
   prediction: string;
+  latest_alert_title: string;
+  latest_alert_desc: string;
+  recommendation: string;
+  alert_risk: string;
+  alert_color: string;
   zones: Zone[];
 }
 
-const initialZones: Zone[] = [
-  {
-    name: "Zone A",
-    people: 42,
-    occupancy: 42,
-    risk: "SAFE",
-    color: "safe",
+const DEMO_SCENARIOS: Record<DemoMode, DashboardScenario> = {
+  NORMAL: {
+    total_crowd: 122,
+    average_density: 41,
+    active_alerts: 0,
     prediction: "Stable",
-    action: "Continue normal monitoring",
+    latest_alert_title: "All zones operational",
+    latest_alert_desc: "No active crowd congestion detected.",
+    recommendation: "Continue normal monitoring",
+    alert_risk: "SAFE",
+    alert_color: "safe",
+    zones: [
+      {
+        name: "Zone A",
+        people: 42,
+        occupancy: 42,
+        risk: "SAFE",
+        color: "safe",
+        prediction: "Stable",
+        action: "Continue normal monitoring",
+      },
+      {
+        name: "Zone B",
+        people: 42,
+        occupancy: 42,
+        risk: "SAFE",
+        color: "safe",
+        prediction: "Stable",
+        action: "Continue normal monitoring",
+      },
+      {
+        name: "Zone C",
+        people: 38,
+        occupancy: 38,
+        risk: "SAFE",
+        color: "safe",
+        prediction: "Stable",
+        action: "Continue normal monitoring",
+      },
+    ],
   },
-  {
-    name: "Zone B",
-    people: 78,
-    occupancy: 78,
-    risk: "HIGH",
-    color: "high",
+  RISING: {
+    total_crowd: 168,
+    average_density: 56,
+    active_alerts: 1,
     prediction: "Congestion Likely",
-    action: "Redirect incoming flow + deploy personnel",
+    latest_alert_title: "Zone B & C crowd rising",
+    latest_alert_desc: "Crowd density increasing in Zone B and C.",
+    recommendation: "Monitor closely",
+    alert_risk: "WARNING",
+    alert_color: "warning",
+    zones: [
+      {
+        name: "Zone A",
+        people: 48,
+        occupancy: 48,
+        risk: "SAFE",
+        color: "safe",
+        prediction: "Stable",
+        action: "Continue normal monitoring",
+      },
+      {
+        name: "Zone B",
+        people: 68,
+        occupancy: 68,
+        risk: "WARNING",
+        color: "warning",
+        prediction: "Crowd Rising",
+        action: "Monitor closely",
+      },
+      {
+        name: "Zone C",
+        people: 52,
+        occupancy: 52,
+        risk: "WARNING",
+        color: "warning",
+        prediction: "Crowd Rising",
+        action: "Monitor closely",
+      },
+    ],
   },
-  {
-    name: "Zone C",
-    people: 58,
-    occupancy: 58,
-    risk: "WARNING",
-    color: "warning",
-    prediction: "Crowd Rising",
-    action: "Monitor closely",
+  HIGH: {
+    total_crowd: 191,
+    average_density: 64,
+    active_alerts: 2,
+    prediction: "Rising",
+    latest_alert_title: "Zone B high congestion",
+    latest_alert_desc: "High crowd density detected in Zone B.",
+    recommendation: "Redirect incoming flow + deploy personnel",
+    alert_risk: "HIGH",
+    alert_color: "high",
+    zones: [
+      {
+        name: "Zone A",
+        people: 52,
+        occupancy: 52,
+        risk: "WARNING",
+        color: "warning",
+        prediction: "Crowd Rising",
+        action: "Monitor closely",
+      },
+      {
+        name: "Zone B",
+        people: 78,
+        occupancy: 78,
+        risk: "HIGH",
+        color: "high",
+        prediction: "Congestion Likely",
+        action: "Redirect incoming flow + deploy personnel",
+      },
+      {
+        name: "Zone C",
+        people: 61,
+        occupancy: 61,
+        risk: "WARNING",
+        color: "warning",
+        prediction: "Crowd Rising",
+        action: "Monitor closely",
+      },
+    ],
   },
-];
+  CRITICAL: {
+    total_crowd: 212,
+    average_density: 71,
+    active_alerts: 3,
+    prediction: "Critical",
+    latest_alert_title: "Zone B critical overload",
+    latest_alert_desc: "Stampede risk in Zone B. Immediate action required!",
+    recommendation: "Restrict entry + Redirect flow + Deploy personnel",
+    alert_risk: "CRITICAL",
+    alert_color: "critical",
+    zones: [
+      {
+        name: "Zone A",
+        people: 55,
+        occupancy: 55,
+        risk: "WARNING",
+        color: "warning",
+        prediction: "Crowd Rising",
+        action: "Monitor closely",
+      },
+      {
+        name: "Zone B",
+        people: 92,
+        occupancy: 92,
+        risk: "CRITICAL",
+        color: "critical",
+        prediction: "Stampede Risk",
+        action: "Restrict entry + Redirect flow + Deploy personnel",
+      },
+      {
+        name: "Zone C",
+        people: 65,
+        occupancy: 65,
+        risk: "HIGH",
+        color: "high",
+        prediction: "Congestion Likely",
+        action: "Redirect incoming flow + deploy personnel",
+      },
+    ],
+  },
+};
 
 function App() {
+  const [demoMode, setDemoMode] = useState<DemoMode>("HIGH");
   const [selectedZone, setSelectedZone] = useState("Zone B");
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setApiData] = useState<any | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:8000/api/dashboard")
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP status ${res.status}`);
-        return res.json();
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) setApiData(data);
       })
-      .then((data: DashboardData) => {
-        setDashboardData(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch dashboard data:", err);
-        setError(err.message);
-        setLoading(false);
-      });
+      .catch((err) => console.error("API fetch error:", err));
   }, []);
 
-  const rawZones = dashboardData?.zones || initialZones;
-  const zones = rawZones.map((z) => ({
-    ...z,
-    color: z.color || z.risk.toLowerCase(),
-  }));
-
+  const scenario = DEMO_SCENARIOS[demoMode];
+  const zones = scenario.zones;
   const selected =
     zones.find((zone) => zone.name === selectedZone) || zones[0];
   const getZone = (name: string) =>
@@ -143,7 +270,7 @@ function App() {
           <button className="nav-item">
             <Bell size={18} />
             Alerts
-            <span className="alert-count">{dashboardData?.active_alerts ?? 3}</span>
+            <span className="alert-count">{scenario.active_alerts}</span>
           </button>
 
           <button className="nav-item">
@@ -169,8 +296,8 @@ function App() {
             <span className="status-dot" />
 
             <div>
-              <strong>{error ? "Backend Warning" : loading ? "Connecting..." : "System Online"}</strong>
-              <small>{error ? "Using cached state" : "All services operational"}</small>
+              <strong>System Online</strong>
+              <small>All services operational</small>
             </div>
           </div>
 
@@ -189,6 +316,20 @@ function App() {
           <div>
             <p className="eyebrow">KUMBH MELA • AUTHORITY VIEW</p>
             <h2>Command Center</h2>
+          </div>
+
+          {/* DEMO MODE CONTROLLER */}
+          <div className="demo-mode-bar">
+            <span className="demo-label">DEMO MODE:</span>
+            {(["NORMAL", "RISING", "HIGH", "CRITICAL"] as const).map((mode) => (
+              <button
+                key={mode}
+                className={`demo-btn ${demoMode === mode ? "active" : ""} ${mode.toLowerCase()}`}
+                onClick={() => setDemoMode(mode)}
+              >
+                {mode}
+              </button>
+            ))}
           </div>
 
           <div className="top-actions">
@@ -240,7 +381,7 @@ function App() {
 
             <div>
               <span>Total Crowd</span>
-              <strong>{dashboardData?.total_crowd ?? 178}</strong>
+              <strong>{scenario.total_crowd}</strong>
               <small>Across monitored zones</small>
             </div>
           </div>
@@ -252,7 +393,7 @@ function App() {
 
             <div>
               <span>Average Density</span>
-              <strong>{dashboardData?.average_density ?? 59}%</strong>
+              <strong>{scenario.average_density}%</strong>
               <small className="up">↑ 8.4% from previous</small>
             </div>
           </div>
@@ -264,8 +405,8 @@ function App() {
 
             <div>
               <span>Active Alerts</span>
-              <strong>{dashboardData?.active_alerts ?? 3}</strong>
-              <small>1 requires attention</small>
+              <strong>{scenario.active_alerts}</strong>
+              <small>{scenario.active_alerts > 0 ? `${scenario.active_alerts} require attention` : "All systems normal"}</small>
             </div>
           </div>
 
@@ -276,7 +417,7 @@ function App() {
 
             <div>
               <span>AI Prediction</span>
-              <strong>{dashboardData?.prediction ?? "Rising"}</strong>
+              <strong>{scenario.prediction}</strong>
               <small>Zone B congestion risk</small>
             </div>
           </div>
@@ -355,7 +496,7 @@ function App() {
               {/* ZONE A */}
 
               <button
-                className={`zone zone-a ${
+                className={`zone zone-a ${getZone("Zone A").color} ${
                   selectedZone === "Zone A" ? "selected" : ""
                 }`}
                 onClick={() => setSelectedZone("Zone A")}
@@ -367,7 +508,7 @@ function App() {
               {/* ZONE B */}
 
               <button
-                className={`zone zone-b ${
+                className={`zone zone-b ${getZone("Zone B").color} ${
                   selectedZone === "Zone B" ? "selected" : ""
                 }`}
                 onClick={() => setSelectedZone("Zone B")}
@@ -379,7 +520,7 @@ function App() {
               {/* ZONE C */}
 
               <button
-                className={`zone zone-c ${
+                className={`zone zone-c ${getZone("Zone C").color} ${
                   selectedZone === "Zone C" ? "selected" : ""
                 }`}
                 onClick={() => setSelectedZone("Zone C")}
@@ -532,29 +673,27 @@ function App() {
                 <h3>Latest Alert</h3>
               </div>
 
-              <span className="critical-badge">HIGH</span>
+              <span className={`critical-badge ${scenario.alert_color}`}>
+                {scenario.alert_risk}
+              </span>
             </div>
 
             <div className="alert-content">
-              <div className="alert-symbol">
+              <div className={`alert-symbol ${scenario.alert_color}`}>
                 <CircleAlert size={24} />
               </div>
 
               <div>
-                <strong>Zone B crowd rising</strong>
+                <strong>{scenario.latest_alert_title}</strong>
 
-                <p>
-                  Congestion likely if current flow continues.
-                </p>
+                <p>{scenario.latest_alert_desc}</p>
               </div>
             </div>
 
             <div className="recommendation">
               <span>RECOMMENDED ACTION</span>
 
-              <strong>
-                Redirect incoming flow + deploy personnel
-              </strong>
+              <strong>{scenario.recommendation}</strong>
             </div>
           </div>
         </section>
