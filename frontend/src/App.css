@@ -6429,14 +6429,91 @@ footer {
   display: none;
 }
 
-/* RESPONSIVE MEDIA QUERIES (TABLET & MOBILE) */
+/* =========================================================
+   MOBILE DRAWER BACKDROP & BRANDING CHROME
+   ========================================================= */
+
+.sidebar-mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9990;
+  cursor: pointer;
+  animation: fadeInBackdrop 0.2s ease forwards;
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.topbar-mobile-brand {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: var(--saffron);
+}
+
+/* =========================================================
+   GLOBAL OVERFLOW & RESPONSIVE MEDIA QUERIES (TABLET & MOBILE)
+   ========================================================= */
+
+html,
+body,
+#root,
+.app,
+.main,
+.home-container,
+.landing-navbar,
+.hero-section,
+.home-section,
+footer,
+.landing-footer {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+body,
+.app,
+.main,
+.home-container {
+  overflow-x: hidden !important;
+}
+
+.flow-one,
+.flow-two {
+  pointer-events: none !important;
+  max-width: 100vw !important;
+}
 
 /* 1. TABLET & MOBILE SIDEBAR DRAWER (<1024px) */
 @media (max-width: 1023px) {
+  .topbar-mobile-brand {
+    display: flex;
+  }
+
   .mobile-menu-toggle-btn {
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .mobile-menu-toggle-btn:hover {
+    background: var(--saffron-soft);
+    border-color: var(--saffron);
   }
 
   .desktop-only-btn {
@@ -6445,6 +6522,14 @@ footer {
 
   .mobile-close-btn {
     display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 6px;
+    cursor: pointer;
   }
 
   .sidebar {
@@ -6454,10 +6539,12 @@ footer {
     bottom: 0 !important;
     height: 100vh !important;
     width: 280px !important;
+    max-width: 85vw !important;
     z-index: 9999 !important;
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5) !important;
+    overflow-y: auto !important;
   }
 
   .sidebar.mobile-open {
@@ -6468,21 +6555,28 @@ footer {
     margin-left: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
-    padding: 16px 14px 24px !important;
+    padding: 16px 16px 24px !important;
+    box-sizing: border-box !important;
   }
 }
 
-/* 2. TOPBAR BREAKPOINTS (<900px & <640px) */
+/* 2. TOPBAR BREAKPOINTS (<900px & <768px) */
 @media (max-width: 900px) {
   .topbar {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
     padding: 14px 16px;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .topbar-header-left {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
+    width: 100%;
   }
 
   .demo-mode-bar {
@@ -6492,6 +6586,7 @@ footer {
     padding: 6px 8px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    box-sizing: border-box;
   }
 
   .demo-mode-bar::-webkit-scrollbar {
@@ -6502,6 +6597,8 @@ footer {
     flex-wrap: wrap;
     gap: 8px;
     justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .time {
@@ -6509,7 +6606,55 @@ footer {
   }
 }
 
-/* 3. DASHBOARD METRICS & GRIDS */
+/* 3. LANDING NAVBAR MOBILE FIX (<768px) */
+@media (max-width: 768px) {
+  .landing-nav-links {
+    display: none !important;
+  }
+
+  .landing-brand-text .brand-sub {
+    display: none !important;
+  }
+
+  .landing-navbar {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 10px 16px !important;
+  }
+
+  .landing-nav-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+
+  .landing-nav-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .btn-get-started {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    gap: 4px !important;
+  }
+
+  .theme-toggle-btn {
+    padding: 7px 10px !important;
+    font-size: 11px !important;
+    gap: 4px !important;
+  }
+}
+
+/* 4. DASHBOARD METRICS & GRIDS (<1024px & <768px) */
 @media (max-width: 1024px) {
   .metrics-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -6520,7 +6665,7 @@ footer {
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .metrics-grid {
     grid-template-columns: 1fr !important;
   }
@@ -6533,18 +6678,42 @@ footer {
   .ivr-dash-cards-grid {
     grid-template-columns: 1fr !important;
   }
+  .live-crowd-card,
+  .sectors-card,
+  .risk-dist-card,
+  .intelligent-response-card,
+  .latest-alert-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
 }
 
-/* 4. CROWD MAP BREAKPOINTS */
+/* 5. CROWD MAP & LEAFLET MOBILE BREAKPOINTS */
 @media (max-width: 768px) {
-  .dedicated-map-container {
-    height: 360px !important;
+  .dedicated-map-container,
+  .hero-map-wrapper {
+    height: 330px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
   }
+
   .selected-zone-details-panel .zone-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
   .zone-summary-cards-grid {
     grid-template-columns: 1fr !important;
+  }
+
+  .leaflet-control-attribution {
+    font-size: 9px !important;
+    max-width: 85% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 }
 
@@ -6554,7 +6723,7 @@ footer {
   }
 }
 
-/* 5. LIVE CAMERAS & VIDEO RESPONSIVENESS */
+/* 6. LIVE CAMERAS & VIDEO RESPONSIVENESS */
 @media (max-width: 900px) {
   .camera-grid {
     grid-template-columns: 1fr !important;
@@ -6570,7 +6739,7 @@ footer {
   }
 }
 
-/* 6. ALERTS & FILTER BAR */
+/* 7. ALERTS & FILTER BAR */
 @media (max-width: 768px) {
   .alert-filter-bar {
     flex-wrap: wrap !important;
@@ -6587,7 +6756,7 @@ footer {
   }
 }
 
-/* 7. EMERGENCY IVR & MODAL */
+/* 8. EMERGENCY IVR & MODAL */
 @media (max-width: 900px) {
   .ivr-cards-grid {
     grid-template-columns: 1fr !important;
@@ -6599,6 +6768,7 @@ footer {
   .table-wrapper {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
   }
 }
 
@@ -6611,7 +6781,7 @@ footer {
   }
 }
 
-/* 8. ANALYTICS BREAKPOINTS */
+/* 9. ANALYTICS BREAKPOINTS */
 @media (max-width: 1024px) {
   .analytics-charts-grid {
     grid-template-columns: 1fr !important;
@@ -6627,7 +6797,7 @@ footer {
   }
 }
 
-/* 9. SETTINGS & COMFORTABLE TOUCH TARGETS */
+/* 10. SETTINGS & TOUCH TARGETS */
 @media (max-width: 768px) {
   .settings-grid {
     grid-template-columns: 1fr !important;
@@ -6640,13 +6810,13 @@ footer {
   }
 }
 
-/* 10. LANDING HOME PAGE RESPONSIVENESS */
+/* 11. LANDING HOME PAGE RESPONSIVENESS (<1024px & <640px) */
 @media (max-width: 1024px) {
   .hero-content-grid,
   .ai-vision-grid,
   .panchavati-card-wrapper {
     grid-template-columns: 1fr !important;
-    gap: 30px !important;
+    gap: 24px !important;
   }
   .pipeline-grid {
     flex-direction: column !important;
@@ -6666,8 +6836,13 @@ footer {
 }
 
 @media (max-width: 640px) {
+  .hero-section {
+    padding: 24px 16px 36px !important;
+  }
   .hero-headline {
-    font-size: clamp(28px, 7vw, 42px) !important;
+    font-size: clamp(26px, 7.5vw, 38px) !important;
+    line-height: 1.25 !important;
+    word-break: break-word !important;
   }
   .hero-actions {
     flex-direction: column !important;
@@ -6680,7 +6855,8 @@ footer {
     justify-content: center !important;
   }
   .hero-map-wrapper {
-    height: 300px !important;
+    height: 320px !important;
+    width: 100% !important;
   }
   .stats-grid {
     grid-template-columns: 1fr !important;
@@ -6699,5 +6875,6 @@ footer {
     gap: 6px !important;
   }
 }
+
 
 

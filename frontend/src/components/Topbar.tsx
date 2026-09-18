@@ -1,5 +1,6 @@
 import { Menu } from "lucide-react";
 import type { DemoMode, TabType } from "../types";
+import { PravahaLogo } from "./PravahaLogo";
 
 interface TopbarProps {
   activeTab: TabType;
@@ -23,16 +24,12 @@ export function Topbar({
   return (
     <header className="topbar">
       <div className="topbar-header-left">
-        {setIsMobileOpen && (
-          <button
-            className="mobile-menu-toggle-btn"
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-            aria-label="Toggle Navigation Menu"
-          >
-            <Menu size={20} />
-          </button>
-        )}
-        <div>
+        <div className="topbar-mobile-brand">
+          <PravahaLogo size={22} />
+          <span className="mobile-brand-title">PRAVAHA</span>
+        </div>
+
+        <div className="topbar-title-group">
           <p className="eyebrow">◇ KUMBH MELA • AUTHORITY VIEW</p>
           <h2>
             {activeTab === "ivr"
@@ -50,6 +47,17 @@ export function Topbar({
               : "Command Center"}
           </h2>
         </div>
+
+        {setIsMobileOpen && (
+          <button
+            className="mobile-menu-toggle-btn"
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            aria-label="Toggle Navigation Menu"
+            title="Open Navigation Menu"
+          >
+            <Menu size={22} />
+          </button>
+        )}
       </div>
 
       {/* DEMO MODE CONTROLLER */}
@@ -100,3 +108,4 @@ export function Topbar({
     </header>
   );
 }
+
