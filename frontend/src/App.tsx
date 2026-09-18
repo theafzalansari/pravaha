@@ -25,6 +25,18 @@ function App() {
     "standard" | "extreme" | null
   >(null);
   const [, setApiData] = useState<any | null>(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const saved = localStorage.getItem("pravaha_theme");
+    return saved === "dark" ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("pravaha_theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
+    document.body.setAttribute("data-theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     fetch("http://localhost:8000/api/dashboard")
@@ -38,7 +50,7 @@ function App() {
   const scenario = DEMO_SCENARIOS[demoMode];
 
   return (
-    <div className="app">
+    <div className={`app ${isSidebarCollapsed ? "sidebar-collapsed" : ""}`}>
       {/* Decorative background */}
       <div className="flow flow-one" />
       <div className="flow flow-two" />
@@ -48,6 +60,8 @@ function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         activeAlerts={scenario.active_alerts}
+        isCollapsed={isSidebarCollapsed}
+        setIsCollapsed={setIsSidebarCollapsed}
       />
 
       {/* MAIN CONTENT AREA */}
@@ -57,6 +71,8 @@ function App() {
           activeTab={activeTab}
           demoMode={demoMode}
           setDemoMode={setDemoMode}
+          theme={theme}
+          setTheme={setTheme}
         />
 
         {/* PAGE RENDERING */}
@@ -95,7 +111,13 @@ function App() {
           />
         )}
 
-        {activeTab === "settings" && <Settings demoMode={demoMode} />}
+        {activeTab === "settings" && (
+          <Settings
+            demoMode={demoMode}
+            theme={theme}
+            setTheme={setTheme}
+          />
+        )}
 
         {/* INTERACTIVE FLOW MODAL */}
         {selectedFlowModal && (

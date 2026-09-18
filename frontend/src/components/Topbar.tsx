@@ -4,13 +4,21 @@ interface TopbarProps {
   activeTab: TabType;
   demoMode: DemoMode;
   setDemoMode: (mode: DemoMode) => void;
+  theme?: "light" | "dark";
+  setTheme?: (theme: "light" | "dark") => void;
 }
 
-export function Topbar({ activeTab, demoMode, setDemoMode }: TopbarProps) {
+export function Topbar({
+  activeTab,
+  demoMode,
+  setDemoMode,
+  theme = "light",
+  setTheme,
+}: TopbarProps) {
   return (
     <header className="topbar">
       <div>
-        <p className="eyebrow">KUMBH MELA • AUTHORITY VIEW</p>
+        <p className="eyebrow">◇ KUMBH MELA • AUTHORITY VIEW</p>
         <h2>
           {activeTab === "ivr"
             ? "Emergency IVR"
@@ -45,6 +53,25 @@ export function Topbar({ activeTab, demoMode, setDemoMode }: TopbarProps) {
       </div>
 
       <div className="top-actions">
+        {/* THEME TOGGLE */}
+        {setTheme && (
+          <div className="theme-mode-bar">
+            <span className="theme-label">THEME:</span>
+            <button
+              className={`theme-btn ${theme === "light" ? "active" : ""}`}
+              onClick={() => setTheme("light")}
+            >
+              LIGHT
+            </button>
+            <button
+              className={`theme-btn ${theme === "dark" ? "active" : ""}`}
+              onClick={() => setTheme("dark")}
+            >
+              DARK
+            </button>
+          </div>
+        )}
+
         <div className="live-status">
           <span className="pulse" />
           LIVE MONITORING

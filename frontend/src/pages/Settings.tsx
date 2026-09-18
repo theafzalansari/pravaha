@@ -3,8 +3,10 @@ import {
   Camera,
   Gauge,
   Layers,
+  Moon,
   Radio,
   Settings as SettingsIcon,
+  Sun,
   Zap,
 } from "lucide-react";
 import type { DemoMode } from "../types";
@@ -12,9 +14,11 @@ import { DEMO_SCENARIOS } from "../data/demoData";
 
 interface SettingsProps {
   demoMode: DemoMode;
+  theme?: "light" | "dark";
+  setTheme?: (theme: "light" | "dark") => void;
 }
 
-export function Settings({ demoMode }: SettingsProps) {
+export function Settings({ demoMode, theme = "light", setTheme }: SettingsProps) {
   const scenario = DEMO_SCENARIOS[demoMode];
 
   return (
@@ -27,7 +31,7 @@ export function Settings({ demoMode }: SettingsProps) {
             SYSTEM CONFIGURATION
           </span>
           <h3>Settings</h3>
-          <p>System configuration and monitoring status</p>
+          <p>System configuration, operational themes, and monitoring status</p>
         </div>
         <div className="live-status-badge">
           <span className="online-dot" />
@@ -36,6 +40,46 @@ export function Settings({ demoMode }: SettingsProps) {
       </div>
 
       <div className="settings-grid">
+        {/* THEME CONFIGURATION CARD */}
+        {setTheme && (
+          <div className="panel settings-card">
+            <div className="card-title-group">
+              {theme === "dark" ? (
+                <Moon size={18} className="icon-gold" />
+              ) : (
+                <Sun size={18} className="icon-gold" />
+              )}
+              <h4>Application Theme</h4>
+            </div>
+
+            <div className="settings-status-list">
+              <div className="settings-row">
+                <div>
+                  <strong>Command Center Theme</strong>
+                  <small>Persisted operating mode</small>
+                </div>
+                <div className="theme-select-pills">
+                  <button
+                    className={`theme-chip ${theme === "light" ? "active" : ""}`}
+                    onClick={() => setTheme("light")}
+                  >
+                    LIGHT
+                  </button>
+                  <button
+                    className={`theme-chip ${theme === "dark" ? "active" : ""}`}
+                    onClick={() => setTheme("dark")}
+                  >
+                    DARK
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <p className="settings-note-sub">
+              Dark mode provides a night-time command center interface while preserving Indian heritage identity.
+            </p>
+          </div>
+        )}
         {/* 2. SYSTEM STATUS CARD */}
         <div className="panel settings-card">
           <div className="card-title-group">

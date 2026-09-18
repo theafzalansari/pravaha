@@ -38,6 +38,11 @@ export interface DashboardScenario {
   recommendation: string;
   alert_risk: string;
   alert_color: string;
+  people_flow: string;
+  peak_occupancy: string;
+  crowd_flow_insight: string;
+  prediction_insight: string;
+  response_insight: string;
   zones: Zone[];
 }
 

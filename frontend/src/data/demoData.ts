@@ -45,6 +45,11 @@ export const DEMO_SCENARIOS: Record<DemoMode, DashboardScenario> = {
     recommendation: "Continue normal monitoring",
     alert_risk: "SAFE",
     alert_color: "safe",
+    people_flow: "Stable",
+    peak_occupancy: "52%",
+    crowd_flow_insight: "Normal flow across all sectors",
+    prediction_insight: "Zones A, B & C — Stable movement",
+    response_insight: "0 active alerts requiring attention",
     zones: [
       {
         name: "Zone A",
@@ -85,6 +90,11 @@ export const DEMO_SCENARIOS: Record<DemoMode, DashboardScenario> = {
     recommendation: "Monitor closely",
     alert_risk: "WARNING",
     alert_color: "warning",
+    people_flow: "+8 / min",
+    peak_occupancy: "68%",
+    crowd_flow_insight: "Incoming crowd density increasing",
+    prediction_insight: "Zone B — Crowd accumulation rising",
+    response_insight: "1 active warning logged",
     zones: [
       {
         name: "Zone A",
@@ -125,6 +135,11 @@ export const DEMO_SCENARIOS: Record<DemoMode, DashboardScenario> = {
     recommendation: "Redirect incoming flow + deploy personnel",
     alert_risk: "HIGH",
     alert_color: "high",
+    people_flow: "+12 / min",
+    peak_occupancy: "78%",
+    crowd_flow_insight: "High flow rate toward central Sector B",
+    prediction_insight: "Zone B — Congestion likely",
+    response_insight: "2 active alerts require attention",
     zones: [
       {
         name: "Zone A",
@@ -165,6 +180,11 @@ export const DEMO_SCENARIOS: Record<DemoMode, DashboardScenario> = {
     recommendation: "Restrict entry + Redirect flow + Deploy personnel",
     alert_risk: "CRITICAL",
     alert_color: "critical",
+    people_flow: "+18 / min",
+    peak_occupancy: "92%",
+    crowd_flow_insight: "Extreme surge detected at ghat access",
+    prediction_insight: "Zone B & A — Critical bottleneck imminent",
+    response_insight: "3 critical emergency alerts active",
     zones: [
       {
         name: "Zone A",
