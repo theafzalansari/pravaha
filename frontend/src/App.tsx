@@ -27,6 +27,7 @@ function App() {
   >(null);
   const [, setApiData] = useState<any | null>(null);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     const saved = localStorage.getItem("pravaha_theme");
@@ -70,6 +71,14 @@ function App() {
       <div className="flow flow-one" />
       <div className="flow flow-two" />
 
+      {/* MOBILE DRAWER BACKDROP */}
+      {isMobileDrawerOpen && (
+        <div
+          className="sidebar-mobile-backdrop"
+          onClick={() => setIsMobileDrawerOpen(false)}
+        />
+      )}
+
       {/* SIDEBAR */}
       <Sidebar
         activeTab={activeTab}
@@ -77,6 +86,8 @@ function App() {
         activeAlerts={scenario.active_alerts}
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
+        isMobileOpen={isMobileDrawerOpen}
+        setIsMobileOpen={setIsMobileDrawerOpen}
       />
 
       {/* MAIN CONTENT AREA */}
@@ -88,6 +99,8 @@ function App() {
           setDemoMode={setDemoMode}
           theme={theme}
           setTheme={setTheme}
+          isMobileOpen={isMobileDrawerOpen}
+          setIsMobileOpen={setIsMobileDrawerOpen}
         />
 
         {/* PAGE RENDERING */}

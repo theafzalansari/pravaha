@@ -1,3 +1,4 @@
+import { Menu } from "lucide-react";
 import type { DemoMode, TabType } from "../types";
 
 interface TopbarProps {
@@ -6,6 +7,8 @@ interface TopbarProps {
   setDemoMode: (mode: DemoMode) => void;
   theme?: "light" | "dark";
   setTheme?: (theme: "light" | "dark") => void;
+  isMobileOpen?: boolean;
+  setIsMobileOpen?: (open: boolean) => void;
 }
 
 export function Topbar({
@@ -14,26 +17,39 @@ export function Topbar({
   setDemoMode,
   theme = "light",
   setTheme,
+  isMobileOpen = false,
+  setIsMobileOpen,
 }: TopbarProps) {
   return (
     <header className="topbar">
-      <div>
-        <p className="eyebrow">◇ KUMBH MELA • AUTHORITY VIEW</p>
-        <h2>
-          {activeTab === "ivr"
-            ? "Emergency IVR"
-            : activeTab === "analytics"
-            ? "Analytics"
-            : activeTab === "cameras"
-            ? "Live Cameras"
-            : activeTab === "crowd-map"
-            ? "Crowd Map"
-            : activeTab === "alerts"
-            ? "Alerts"
-            : activeTab === "settings"
-            ? "Settings"
-            : "Command Center"}
-        </h2>
+      <div className="topbar-header-left">
+        {setIsMobileOpen && (
+          <button
+            className="mobile-menu-toggle-btn"
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            aria-label="Toggle Navigation Menu"
+          >
+            <Menu size={20} />
+          </button>
+        )}
+        <div>
+          <p className="eyebrow">◇ KUMBH MELA • AUTHORITY VIEW</p>
+          <h2>
+            {activeTab === "ivr"
+              ? "Emergency IVR"
+              : activeTab === "analytics"
+              ? "Analytics"
+              : activeTab === "cameras"
+              ? "Live Cameras"
+              : activeTab === "crowd-map"
+              ? "Crowd Map"
+              : activeTab === "alerts"
+              ? "Alerts"
+              : activeTab === "settings"
+              ? "Settings"
+              : "Command Center"}
+          </h2>
+        </div>
       </div>
 
       {/* DEMO MODE CONTROLLER */}

@@ -6392,53 +6392,311 @@ footer {
 .selected-zone-details-panel .zone-metrics .metric strong.high { color: var(--high); }
 .selected-zone-details-panel .zone-metrics .metric strong.critical { color: var(--critical); }
 
-/* RESPONSIVE LANDING BREAKPOINTS */
+/* MOBILE DRAWER & BACKDROP STYLES */
+.sidebar-mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 16, 14, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9998;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.topbar-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-toggle-btn {
+  display: none;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-toggle-btn:hover {
+  background: var(--surface);
+  border-color: var(--saffron-border);
+}
+
+.mobile-close-btn {
+  display: none;
+}
+
+/* RESPONSIVE MEDIA QUERIES (TABLET & MOBILE) */
+
+/* 1. TABLET & MOBILE SIDEBAR DRAWER (<1024px) */
+@media (max-width: 1023px) {
+  .mobile-menu-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .desktop-only-btn {
+    display: none !important;
+  }
+
+  .mobile-close-btn {
+    display: inline-flex !important;
+  }
+
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    height: 100vh !important;
+    width: 280px !important;
+    z-index: 9999 !important;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0) !important;
+  }
+
+  .main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 16px 14px 24px !important;
+  }
+}
+
+/* 2. TOPBAR BREAKPOINTS (<900px & <640px) */
+@media (max-width: 900px) {
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .topbar-header-left {
+    justify-content: space-between;
+  }
+
+  .demo-mode-bar {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 6px 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .demo-mode-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .top-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .time {
+    display: none;
+  }
+}
+
+/* 3. DASHBOARD METRICS & GRIDS */
+@media (max-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+  .op-intel-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .op-intel-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bottom-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .ivr-dash-cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 4. CROWD MAP BREAKPOINTS */
+@media (max-width: 768px) {
+  .dedicated-map-container {
+    height: 360px !important;
+  }
+  .selected-zone-details-panel .zone-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .zone-summary-cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .selected-zone-details-panel .zone-metrics {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 5. LIVE CAMERAS & VIDEO RESPONSIVENESS */
+@media (max-width: 900px) {
+  .camera-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .expanded-video-viewport {
+    height: auto !important;
+    max-height: 55vh !important;
+  }
+  .main-camera-card video {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+}
+
+/* 6. ALERTS & FILTER BAR */
+@media (max-width: 768px) {
+  .alert-filter-bar {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .alert-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .alert-actions {
+    width: 100% !important;
+    justify-content: flex-end !important;
+  }
+}
+
+/* 7. EMERGENCY IVR & MODAL */
+@media (max-width: 900px) {
+  .ivr-cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .ivr-flow-pills {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .table-wrapper {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .modal-container {
+    width: 94vw !important;
+    padding: 16px 12px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* 8. ANALYTICS BREAKPOINTS */
+@media (max-width: 1024px) {
+  .analytics-charts-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .zone-cards-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .zone-cards-list {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 9. SETTINGS & COMFORTABLE TOUCH TARGETS */
+@media (max-width: 768px) {
+  .settings-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .settings-card input,
+  .settings-card select,
+  .settings-card button {
+    min-height: 44px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* 10. LANDING HOME PAGE RESPONSIVENESS */
 @media (max-width: 1024px) {
   .hero-content-grid,
   .ai-vision-grid,
   .panchavati-card-wrapper {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
   }
   .pipeline-grid {
-    flex-direction: column;
+    flex-direction: column !important;
   }
   .pipeline-connector {
-    transform: rotate(90deg);
-    justify-content: center;
-    padding: 8px 0;
-  }
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .risk-levels-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr);
+    transform: rotate(90deg) !important;
+    justify-content: center !important;
+    padding: 6px 0 !important;
   }
   .sector-cards-grid {
-    grid-template-columns: 1fr;
-  }
-  .ivr-cards-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
   .footer-inner {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 30px !important;
   }
 }
 
 @media (max-width: 640px) {
   .hero-headline {
-    font-size: 32px;
+    font-size: clamp(28px, 7vw, 42px) !important;
   }
-  .stats-grid,
-  .risk-levels-grid,
-  .features-grid,
+  .hero-actions {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+  .btn-primary-hero,
+  .btn-secondary-hero {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .hero-map-wrapper {
+    height: 300px !important;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .risk-levels-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .features-grid {
+    grid-template-columns: 1fr !important;
+  }
   .footer-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
-  .landing-nav-links {
-    display: none;
+  .footer-bottom-inner {
+    flex-direction: column !important;
+    gap: 6px !important;
   }
 }
 

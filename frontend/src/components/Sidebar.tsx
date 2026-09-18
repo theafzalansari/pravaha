@@ -10,6 +10,7 @@ import {
   Map,
   Radio,
   Settings,
+  X,
 } from "lucide-react";
 import { PravahaLogo } from "./PravahaLogo";
 import type { TabType } from "../types";
@@ -20,6 +21,8 @@ interface SidebarProps {
   activeAlerts: number;
   isCollapsed?: boolean;
   setIsCollapsed?: (collapsed: boolean) => void;
+  isMobileOpen?: boolean;
+  setIsMobileOpen?: (open: boolean) => void;
 }
 
 export function Sidebar({
@@ -28,6 +31,8 @@ export function Sidebar({
   activeAlerts,
   isCollapsed: controlledIsCollapsed,
   setIsCollapsed: controlledSetIsCollapsed,
+  isMobileOpen = false,
+  setIsMobileOpen,
 }: SidebarProps) {
   const [localIsCollapsed, setLocalIsCollapsed] = useState(false);
   const isCollapsed = controlledIsCollapsed ?? localIsCollapsed;
@@ -39,8 +44,19 @@ export function Sidebar({
     }
   };
 
+  const handleTabClick = (tab: TabType) => {
+    setActiveTab(tab);
+    if (setIsMobileOpen) {
+      setIsMobileOpen(false);
+    }
+  };
+
   return (
-    <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+    <aside
+      className={`sidebar ${isCollapsed ? "collapsed" : ""} ${
+        isMobileOpen ? "mobile-open" : ""
+      }`}
+    >
       <div className="brand-header">
         <div className="brand" title={isCollapsed ? "PRAVAHA AI Crowd Intelligence" : undefined}>
           <div className="brand-symbol">
@@ -56,13 +72,23 @@ export function Sidebar({
         </div>
 
         <button
-          className="sidebar-toggle-btn"
+          className="sidebar-toggle-btn desktop-only-btn"
           onClick={toggleCollapse}
           title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
           aria-label={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
           {isCollapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
         </button>
+
+        {setIsMobileOpen && (
+          <button
+            className="sidebar-toggle-btn mobile-close-btn"
+            onClick={() => setIsMobileOpen(false)}
+            aria-label="Close Navigation Menu"
+          >
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       <div className="culture-line" />
@@ -77,7 +103,7 @@ export function Sidebar({
 
         <button
           className={`nav-item ${activeTab === "home" ? "active" : ""}`}
-          onClick={() => setActiveTab("home")}
+          onClick={() => handleTabClick("home")}
           title={isCollapsed ? "Home Page" : undefined}
         >
           {!isCollapsed && (
@@ -89,7 +115,7 @@ export function Sidebar({
 
         <button
           className={`nav-item ${activeTab === "dashboard" ? "active" : ""}`}
-          onClick={() => setActiveTab("dashboard")}
+          onClick={() => handleTabClick("dashboard")}
           title={isCollapsed ? "Dashboard" : undefined}
         >
           {!isCollapsed && (
@@ -101,7 +127,7 @@ export function Sidebar({
 
         <button
           className={`nav-item ${activeTab === "crowd-map" ? "active" : ""}`}
-          onClick={() => setActiveTab("crowd-map")}
+          onClick={() => handleTabClick("crowd-map")}
           title={isCollapsed ? "Crowd Map" : undefined}
         >
           {!isCollapsed && (
@@ -113,7 +139,7 @@ export function Sidebar({
 
         <button
           className={`nav-item ${activeTab === "cameras" ? "active" : ""}`}
-          onClick={() => setActiveTab("cameras")}
+          onClick={() => handleTabClick("cameras")}
           title={isCollapsed ? "Live Cameras" : undefined}
         >
           {!isCollapsed && (
@@ -125,7 +151,7 @@ export function Sidebar({
 
         <button
           className={`nav-item ${activeTab === "alerts" ? "active" : ""}`}
-          onClick={() => setActiveTab("alerts")}
+          onClick={() => handleTabClick("alerts")}
           title={isCollapsed ? "Alerts" : undefined}
         >
           {!isCollapsed && (
@@ -138,7 +164,7 @@ export function Sidebar({
 
         <button
           className={`nav-item ${activeTab === "ivr" ? "active" : ""}`}
-          onClick={() => setActiveTab("ivr")}
+          onClick={() => handleTabClick("ivr")}
           title={isCollapsed ? "Emergency IVR" : undefined}
         >
           {!isCollapsed && (
@@ -157,7 +183,7 @@ export function Sidebar({
 
         <button
           className={`nav-item ${activeTab === "analytics" ? "active" : ""}`}
-          onClick={() => setActiveTab("analytics")}
+          onClick={() => handleTabClick("analytics")}
           title={isCollapsed ? "Analytics" : undefined}
         >
           {!isCollapsed && (
@@ -169,7 +195,7 @@ export function Sidebar({
 
         <button
           className={`nav-item ${activeTab === "settings" ? "active" : ""}`}
-          onClick={() => setActiveTab("settings")}
+          onClick={() => handleTabClick("settings")}
           title={isCollapsed ? "Settings" : undefined}
         >
           {!isCollapsed && (
