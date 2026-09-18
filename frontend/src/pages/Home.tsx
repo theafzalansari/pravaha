@@ -16,6 +16,15 @@ import {
   Sun,
   Moon,
   Sparkles,
+  Menu,
+  X,
+  LayoutDashboard,
+  Map,
+  Camera,
+  Bell,
+  Radio,
+  Settings,
+  Home as HomeIcon,
 } from "lucide-react";
 import { MapContainer, TileLayer, Circle, Tooltip } from "react-leaflet";
 import { PravahaLogo } from "../components/PravahaLogo";
@@ -36,6 +45,7 @@ export function Home({
   setTheme,
 }: HomeProps) {
   const [activeTabSection, setActiveTabSection] = useState("overview");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scenario = DEMO_SCENARIOS[demoMode];
   const zones = scenario.zones;
@@ -112,9 +122,154 @@ export function Home({
               <span>GET STARTED</span>
               <ArrowRight size={16} />
             </button>
+
+            {/* MOBILE HAMBURGER BUTTON */}
+            <button
+              className="mobile-hamburger-btn"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open Navigation Menu"
+              title="Open Navigation Menu"
+            >
+              <Menu size={22} />
+            </button>
           </div>
         </div>
       </header>
+
+      {/* MOBILE MENU DRAWER OVERLAY */}
+      {mobileMenuOpen && (
+        <>
+          <div
+            className="mobile-drawer-overlay"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+
+          <aside className="mobile-drawer">
+            <div className="mobile-drawer-header">
+              <div className="mobile-drawer-brand">
+                <PravahaLogo size={24} />
+                <div className="mobile-drawer-brand-text">
+                  <h2>PRAVAHA</h2>
+                  <span>AI CROWD INTELLIGENCE</span>
+                </div>
+              </div>
+
+              <button
+                className="mobile-drawer-close-btn"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close Navigation Menu"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="mobile-drawer-nav">
+              <div className="mobile-drawer-nav-group-title">COMMAND CENTER</div>
+
+              <button
+                className="mobile-drawer-nav-item active"
+                onClick={() => {
+                  scrollTo("hero");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <HomeIcon size={18} />
+                <span>HOME PAGE</span>
+              </button>
+
+              <button
+                className="mobile-drawer-nav-item"
+                onClick={() => {
+                  setActiveTab("dashboard");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <LayoutDashboard size={18} />
+                <span>DASHBOARD</span>
+              </button>
+
+              <button
+                className="mobile-drawer-nav-item"
+                onClick={() => {
+                  setActiveTab("crowd-map");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <Map size={18} />
+                <span>CROWD MAP</span>
+              </button>
+
+              <button
+                className="mobile-drawer-nav-item"
+                onClick={() => {
+                  setActiveTab("cameras");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <Camera size={18} />
+                <span>LIVE CAMERAS</span>
+              </button>
+
+              <button
+                className="mobile-drawer-nav-item"
+                onClick={() => {
+                  setActiveTab("alerts");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <Bell size={18} />
+                <span>ALERTS</span>
+              </button>
+
+              <button
+                className="mobile-drawer-nav-item"
+                onClick={() => {
+                  setActiveTab("ivr");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <Radio size={18} />
+                <span>EMERGENCY IVR</span>
+              </button>
+
+              <div className="mobile-drawer-nav-group-title">SYSTEM</div>
+
+              <button
+                className="mobile-drawer-nav-item"
+                onClick={() => {
+                  setActiveTab("analytics");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <Activity size={18} />
+                <span>ANALYTICS</span>
+              </button>
+
+              <button
+                className="mobile-drawer-nav-item"
+                onClick={() => {
+                  setActiveTab("settings");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <Settings size={18} />
+                <span>SETTINGS</span>
+              </button>
+            </div>
+
+            <div className="mobile-drawer-footer">
+              <button
+                className="mobile-drawer-theme-btn"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              >
+                {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+                <span>{theme === "light" ? "SWITCH TO DARK THEME" : "SWITCH TO LIGHT THEME"}</span>
+              </button>
+            </div>
+          </aside>
+        </>
+      )}
+
 
       {/* 2. HERO SECTION */}
       <section id="hero" className="hero-section">
