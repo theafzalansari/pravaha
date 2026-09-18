@@ -5,6 +5,7 @@ import {
   Camera,
   ChevronLeft,
   ChevronRight,
+  Home as HomeIcon,
   LayoutDashboard,
   Map,
   Radio,
@@ -73,6 +74,18 @@ export function Sidebar({
             <span className="nav-label">COMMAND CENTER</span>
           </div>
         )}
+
+        <button
+          className={`nav-item ${activeTab === "home" ? "active" : ""}`}
+          onClick={() => setActiveTab("home")}
+          title={isCollapsed ? "Home Page" : undefined}
+        >
+          {!isCollapsed && (
+            <span className="nav-item-marker">{activeTab === "home" ? "◈" : "◇"}</span>
+          )}
+          <HomeIcon size={18} />
+          {!isCollapsed && <span>Home Page</span>}
+        </button>
 
         <button
           className={`nav-item ${activeTab === "dashboard" ? "active" : ""}`}

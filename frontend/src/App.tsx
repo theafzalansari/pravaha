@@ -15,11 +15,12 @@ import { Alerts } from "./pages/Alerts";
 import { EmergencyIVR } from "./pages/EmergencyIVR";
 import { Analytics } from "./pages/Analytics";
 import { Settings } from "./pages/Settings";
+import { Home } from "./pages/Home";
 
 function App() {
   const [demoMode, setDemoMode] = useState<DemoMode>("HIGH");
   const [selectedZone, setSelectedZone] = useState("Zone B");
-  const [activeTab, setActiveTab] = useState<TabType>("dashboard");
+  const [activeTab, setActiveTab] = useState<TabType>("home");
   const [alertFilter, setAlertFilter] = useState<AlertFilter>("All");
   const [selectedFlowModal, setSelectedFlowModal] = useState<
     "standard" | "extreme" | null
@@ -48,6 +49,20 @@ function App() {
   }, []);
 
   const scenario = DEMO_SCENARIOS[demoMode];
+
+  // If on Home Page, render standalone public landing page layout
+  if (activeTab === "home") {
+    return (
+      <div className="app home-mode">
+        <Home
+          demoMode={demoMode}
+          setActiveTab={setActiveTab}
+          theme={theme}
+          setTheme={setTheme}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={`app ${isSidebarCollapsed ? "sidebar-collapsed" : ""}`}>

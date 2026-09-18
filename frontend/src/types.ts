@@ -1,6 +1,7 @@
 export type DemoMode = "NORMAL" | "RISING" | "HIGH" | "CRITICAL";
 
 export type TabType =
+  | "home"
   | "dashboard"
   | "ivr"
   | "analytics"
