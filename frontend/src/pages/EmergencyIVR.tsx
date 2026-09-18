@@ -269,7 +269,7 @@ export function EmergencyIVR({ setSelectedFlowModal }: EmergencyIVRProps) {
                 <td>
                   <span className="status-badge critical">CRITICAL</span>
                 </td>
-                <td>12:12 PM</td>
+                <td>12:01 PM</td>
               </tr>
               <tr>
                 <td>

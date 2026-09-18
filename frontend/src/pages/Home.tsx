@@ -630,7 +630,7 @@ export function Home({
             <div className="phone-display">
               <Phone size={22} className="phone-icon" />
               <div className="phone-number-wrap">
-                <strong className="phone-num">1800-123-4567</strong>
+                <strong className="phone-num">0204-8565-937</strong>
                 <span className="demo-tag">DEMO NUMBER</span>
               </div>
             </div>
@@ -683,7 +683,7 @@ export function Home({
             <div className="phone-display extreme-display">
               <Phone size={22} className="phone-icon red" />
               <div className="phone-number-wrap">
-                <strong className="phone-num">1800-765-4321</strong>
+                <strong className="phone-num">0951-3886-363</strong>
                 <span className="demo-tag red">DEMO NUMBER</span>
               </div>
             </div>
@@ -723,7 +723,7 @@ export function Home({
         <div className="emergency-flow-diagram">
           <div className="flow-title">PRAVAHA EMERGENCY INCIDENT ENGINE</div>
           <div className="diagram-nodes">
-            <div className="diagram-node">STANDARD IVR (1800-123-4567)</div>
+            <div className="diagram-node">STANDARD IVR (0204-8565-937)</div>
             <div className="diagram-join">┐</div>
             <div className="diagram-node core">INCIDENT ENGINE</div>
             <div className="diagram-arrow">→</div>
@@ -731,7 +731,7 @@ export function Home({
             <div className="diagram-arrow">→</div>
             <div className="diagram-node action">RESPONSE ACTION</div>
             <div className="diagram-join left">┘</div>
-            <div className="diagram-node">EXTREME IVR (1800-765-4321)</div>
+            <div className="diagram-node">EXTREME IVR (0951-388-6363)</div>
           </div>
         </div>
       </section>
